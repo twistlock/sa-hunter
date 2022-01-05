@@ -188,9 +188,9 @@ def get_relevant_subjects(rb, sa_map):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="""Correlates serviceaccounts, pods and nodes to the roles and clusterroles that grant them permissions.
 """)
-    parser.add_argument('-a', dest='all_sas', action='store_true', help="Show all service accounts, not only those assigned to a pod")
-    parser.add_argument('-o', dest='out_file', action='store', help="Save results to output file")
-    parser.add_argument('-l', dest='loud_mode', action='store_true', help="Load mode, print results regardless of -o")
+    parser.add_argument('-a', dest='all_sas', action='store_true', help="show all service accounts, not only those assigned to a pod")
+    parser.add_argument('-o', dest='out_file', action='store', help="save results to output file")
+    parser.add_argument('-l', dest='loud_mode', action='store_true', help="load mode, print results regardless of -o")
     parser.set_defaults(all_sas=False, out_file="", loud_mode=False)
 
     args = parser.parse_args()
