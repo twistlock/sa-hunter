@@ -1,5 +1,5 @@
 # sa-hunter 
-Correlates Kubernetees serviceaccounts, pods and nodes to the roles and clusterroles that grant them permissions.
+Correlates Kubernetes serviceaccounts, pods and nodes to the roles and clusterroles that are binded to them and grant them permissions.
 
 For clusters hosted on managed Kubernetes services, `sa-hunter` also identifies serviceaccount annotations that assign cloud provider IAM entities to Kubernetes serviceaccounts. Currently supports EKS and GKE.
 
