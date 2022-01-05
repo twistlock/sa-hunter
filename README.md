@@ -1,5 +1,20 @@
 # sa-hunter 
-Maps Kubernetes serviceaccounts, pods and nodes to their assigned roles and clusterroles, i.e. their permissions.
+Correlates Kubernetees serviceaccounts, pods and nodes to the roles and clusterroles that grant them permissions.
+
+For clusters hosted on managed Kubernetes services, `sa-hunter` also identifies serviceaccount annotations that assign cloud provider IAM entities to Kubernetes serviceaccounts. Currently supports EKS and GKE.
+
+
+## Quick Start
+1. Clone this repository.
+```bash
+git clone https://github.com/twistlock/sa-hunter
+```
+2. Connect `kubectl` to your cluster.
+3. Run `sa-hunter`.
+```bash
+cd sa-hunter
+./sa_hunter.py
+```
 
 ## Help
 
@@ -39,7 +54,7 @@ optional arguments:
         "providerIAM": 
             {
                 "aws": "AWS role granted to this serviceaccount via the 'eks.amazonaws.com/role-arn' annotation, if exists"
-                "gke": "GCP service account binded to this serviceaccount via the 'iam.gke.io/gcp-service-account' annotation, if exists"
+                "gcp": "GCP service account binded to this serviceaccount via the 'iam.gke.io/gcp-service-account' annotation, if exists"
             },    
         "roles": [
             {
