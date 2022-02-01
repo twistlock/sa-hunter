@@ -40,7 +40,7 @@ def main(args):
     populate_clusterrolebindings_permissions_for_sas(sa_map, cluster_roles, crbs)
 
     # Output results
-    output = json.dumps(list(sa_map.values()), indent=4, sort_keys=True, default=vars)    
+    output = json.dumps({"metadata":{}, "serviceaccounts": list(sa_map.values())}, indent=4, sort_keys=True, default=vars)    
     if not args.out_file or args.loud_mode:
         print(output)
     if args.out_file:
