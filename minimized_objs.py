@@ -24,6 +24,8 @@ class MinimizedServiceAccount():
                     self.providerIAM = {}
                 self.providerIAM["gcp"] = sa_obj["metadata"]["annotations"]["iam.gke.io/gcp-service-account"]
 
+    def fullname(self):
+        return self.namespace + ":" + self.name
 
 class MinimizedNode():
     def __init__(self, name, pods):
@@ -37,3 +39,6 @@ class MinimizedRole():
             self.namespace = role["metadata"]["namespace"] 
         self.rules = role["rules"]
 
+class UnsortableStr(str):
+    def __lt__(self, other):
+        return False

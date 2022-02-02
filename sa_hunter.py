@@ -4,7 +4,7 @@ Finds the permissions of service accounts used by pods.
 Note that clusterroles are shown without a namespace, unless assigned through a rolebinding.
 """
 
-from minimized_objs import MinimizedServiceAccount, MinimizedRole, MinimizedNode
+from minimized_objs import MinimizedServiceAccount, MinimizedRole, MinimizedNode, UnsortableStr
 from kubernetes import client, config
 from sys import argv
 import argparse
@@ -40,7 +40,14 @@ def main(args):
     populate_clusterrolebindings_permissions_for_sas(sa_map, cluster_roles, crbs)
 
     # Output results
-    output = json.dumps({"metadata":{}, "serviceaccounts": list(sa_map.values())}, indent=4, sort_keys=True, default=vars)    
+    sa_results = list(sa_map.values())
+    node_results = map_nodes_to_sa_fullname(sa_results)
+    hunt_results = {
+        UnsortableStr("metadata") : {},
+        UnsortableStr("serviceaccounts"): sa_results,
+        UnsortableStr("nodes"): node_results
+    } 
+    output = json.dumps(hunt_results, indent=4, sort_keys=True, default=vars)    
     if not args.out_file or args.loud_mode:
         print(output)
     if args.out_file:
@@ -183,6 +190,20 @@ def get_relevant_subjects(rb, sa_map):
                         relevant_minimized_sas.append(sa_map[sa_fullname])   
     
     return relevant_minimized_sas
+
+
+def map_nodes_to_sa_fullname(minimized_sa_list:List[MinimizedServiceAccount]) -> List[Dict[str, str]]:
+    node_to_sa_map = {}
+    for minimized_sa in minimized_sa_list:
+        for node in minimized_sa.nodes:
+            if node.name not in node_to_sa_map.keys():
+                node_to_sa_map[node.name] = {
+                    "name": node.name, 
+                    "serviceaccounts": [minimized_sa.fullname()]
+                }
+            else:
+                node_to_sa_map[node.name]["serviceaccounts"].append(minimized_sa.fullname())
+    return list(node_to_sa_map.values())
 
 
 if __name__ == "__main__":
