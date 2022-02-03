@@ -43,7 +43,7 @@ def main(args):
     sa_results = list(sa_map.values())
     node_results = map_nodes_to_sa_fullname(sa_results)
     hunt_results = {
-        UnsortableStr("metadata") : {},
+        UnsortableStr("metadata") : { "platform": get_platform() },
         UnsortableStr("serviceaccounts"): sa_results,
         UnsortableStr("nodes"): node_results
     } 
@@ -204,6 +204,15 @@ def map_nodes_to_sa_fullname(minimized_sa_list:List[MinimizedServiceAccount]) ->
             else:
                 node_to_sa_map[node.name]["serviceaccounts"].append(minimized_sa.fullname())
     return list(node_to_sa_map.values())
+
+
+def get_platform():
+    version_client = client.VersionApi()
+    version_info = version_client.get_code()
+    for platfrom, identifier in {"eks": "-eks-", "gke": "-gke."}.items():
+        if identifier in version_info.git_version:
+            return platfrom
+    return "unknown"
 
 
 if __name__ == "__main__":
