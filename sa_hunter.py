@@ -43,7 +43,7 @@ def main(args):
     sa_results = list(sa_map.values())
     node_results = map_nodes_to_sa_fullname(sa_results)
     hunt_results = {
-        UnsortableStr("metadata") : { "platform": get_platform() },
+        UnsortableStr("metadata") : get_metadata(),
         UnsortableStr("serviceaccounts"): sa_results,
         UnsortableStr("nodes"): node_results
     } 
@@ -206,14 +206,28 @@ def map_nodes_to_sa_fullname(minimized_sa_list:List[MinimizedServiceAccount]) ->
     return list(node_to_sa_map.values())
 
 
+def get_metadata():
+    return {
+        "platform": get_platform(),
+        "cluster": get_cluster_name()
+    }
+    
+
 def get_platform():
     version_client = client.VersionApi()
     version_info = version_client.get_code()
     for platfrom, identifier in {"eks": "-eks-", "gke": "-gke."}.items():
         if identifier in version_info.git_version:
             return platfrom
-    return "unknown"
+    return ""
 
+def get_cluster_name():
+    # returns a tuple of (all_contexts, current)
+    current_context = config.list_kube_config_contexts()[1]
+    if "context"  in current_context:
+        if "cluster" in current_context["context"]:
+            return current_context["context"]["cluster"]
+    return ""
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="""Correlates serviceaccounts, pods and nodes to the roles and clusterroles that grant them permissions.
