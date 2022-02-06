@@ -197,10 +197,11 @@ def map_nodes_to_sa_fullname(minimized_sa_list:List[MinimizedServiceAccount]) ->
     for minimized_sa in minimized_sa_list:
         for node in minimized_sa.nodes:
             if node.name not in node_to_sa_map.keys():
-                node_to_sa_map[node.name] = {
-                    "name": node.name, 
-                    "serviceaccounts": [minimized_sa.fullname()]
-                }
+                if node.name != None:
+                    node_to_sa_map[node.name] = {
+                        "name": node.name, 
+                        "serviceaccounts": [minimized_sa.fullname()]
+                    }
             else:
                 node_to_sa_map[node.name]["serviceaccounts"].append(minimized_sa.fullname())
     return list(node_to_sa_map.values())
