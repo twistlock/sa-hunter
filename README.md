@@ -1,7 +1,7 @@
 # sa-hunter 
-Correlates serviceaccounts, pods and nodes to the permissions granted to them via rolebindings and clusterrolesbindings.
+Correlates serviceaccounts and pods to the permissions granted to them via rolebindings and clusterrolesbindings.
 
-For clusters hosted on managed Kubernetes services, `sa-hunter` identifies serviceaccount annotations that assign cloud provider IAM entities to Kubernetes serviceaccounts. Currently supports EKS and GKE.
+For clusters hosted on managed Kubernetes services, `sa-hunter` identifies serviceaccount annotations that assign cloud provider IAM entities to Kubernetes serviceaccounts. Currently `sa-hunter` supports serviceaccount annotations on EKS and GKE.
 
 
 ## Quick Start
@@ -21,7 +21,7 @@ cd sa-hunter
 ```
 usage: sa_hunter.py [-h] [-a] [-o OUT_FILE] [-l]
 
-Correlates serviceaccounts, pods and nodes to the permissions granted to them via rolebindings and clusterrolesbindings.
+Correlates serviceaccounts and pods to the permissions granted to them via rolebindings and clusterrolesbindings.
 
 optional arguments:
   -h, --help   show this help message and exit
@@ -33,7 +33,10 @@ optional arguments:
 ## Schema
 ```json
 {
-    "metadata": {}, // TBD
+    "metadata": {
+        "cluster": "cluster name from the current kubectl context",
+        "platform": "eks, gke or empty"
+    },
     "serviceaccounts": [
         {
             "name": "serviceaccount name",
@@ -71,9 +74,8 @@ optional arguments:
         {
             "name": "node name",
             "serviceaccounts": [
-                "list of SAs",
-                "hosted on this node",
-                "format is namespace:name"
+                "list of SAs hosted on this node",
+                "format is namespace:name",
             ]
         },
         {

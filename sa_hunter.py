@@ -16,8 +16,8 @@ def main(args):
     core_client = client.CoreV1Api()
     rbac_client = client.RbacAuthorizationV1Api()
 
-    # Build a sa_map, a dictionary of serviceaccounts to inspect. 
-    # sa_map maps between SA names to their corresponding MinimizedServiceAccount object
+    # Build sa_map, a dictionary of serviceaccounts to inspect. 
+    # sa_map maps between SA full names to their corresponding MinimizedServiceAccount object
     used_sa_to_node_map = build_used_sas_to_node_map(core_client)
     sa_map = build_serviceaccount_map(core_client, used_sa_to_node_map, args.all_sas)
     if not sa_map or len(sa_map.keys()) == 0: 
@@ -41,11 +41,11 @@ def main(args):
 
     # Output results
     sa_results = list(sa_map.values())
-    node_results = map_nodes_to_sa_fullname(sa_results)
+    node_data = map_nodes_to_sa_fullname(sa_results)
     hunt_results = {
         UnsortableStr("metadata") : get_metadata(),
         UnsortableStr("serviceaccounts"): sa_results,
-        UnsortableStr("nodes"): node_results
+        UnsortableStr("nodes"): node_data
     } 
     output = json.dumps(hunt_results, indent=4, sort_keys=True, default=vars)    
     if not args.out_file or args.loud_mode:
@@ -231,7 +231,7 @@ def get_cluster_name():
     return ""
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="""Correlates serviceaccounts, pods and nodes to the roles and clusterroles that grant them permissions.
+    parser = argparse.ArgumentParser(description="""Correlates serviceaccounts and pods to the permissions granted to them via rolebindings and clusterrolesbindings.
 """)
     parser.add_argument('-a', dest='all_sas', action='store_true', help="show all service accounts, not only those assigned to a pod")
     parser.add_argument('-o', dest='out_file', action='store', help="save results to output file")
