@@ -5,15 +5,19 @@ For clusters hosted on managed Kubernetes services, `sa-hunter` identifies servi
 
 
 ## Quick Start
+`python3` and `pip3` are required.
 1. Clone this repository.
 ```bash
 git clone https://github.com/twistlock/sa-hunter
 ```
-2. Connect `kubectl` to your cluster.
-3. Run `sa-hunter`.
+2. Install  the required python packages using pip.
 ```bash
-cd sa-hunter
-./sa_hunter.py
+pip3 install -r sa-hunter/requirements.txt
+```
+3. Connect `kubectl` to your cluster.
+4. Run `sa-hunter`.
+```bash
+./sa-hunter/sa_hunter.py
 ```
 
 ## Help
