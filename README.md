@@ -35,7 +35,8 @@ optional arguments:
 {
     "metadata": {
         "cluster": "cluster name from the current kubectl context",
-        "platform": "eks, gke or empty"
+        "platform": "eks, gke or empty",
+        "version": "cluster Kubernetes version"
     },
     "serviceaccounts": [
         {

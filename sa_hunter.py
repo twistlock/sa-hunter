@@ -11,6 +11,11 @@ import argparse
 import json
 from typing import Dict, List
 
+# Disable InsecureRequestWarnings
+from urllib3 import disable_warnings, exceptions 
+disable_warnings(exceptions.InsecureRequestWarning)
+
+
 def main(args):
     config.load_kube_config()
     core_client = client.CoreV1Api()
@@ -208,17 +213,18 @@ def map_nodes_to_sa_fullname(minimized_sa_list:List[MinimizedServiceAccount]) ->
 
 
 def get_metadata():
+    version_client = client.VersionApi()
+    version_info = version_client.get_code()
     return {
-        "platform": get_platform(),
-        "cluster": get_cluster_name()
+        "cluster": get_cluster_name(),
+        "platform": get_platform(version_info.git_version),
+        "version": version_info.git_version
     }
     
 
-def get_platform():
-    version_client = client.VersionApi()
-    version_info = version_client.get_code()
+def get_platform(git_version):
     for platfrom, identifier in {"eks": "-eks-", "gke": "-gke."}.items():
-        if identifier in version_info.git_version:
+        if identifier in git_version:
             return platfrom
     return ""
 
