@@ -27,7 +27,7 @@ optional arguments:
   -h, --help   show this help message and exit
   -a           show all service accounts, not only those assigned to a pod
   -o OUT_FILE  save results to output file
-  -l           load mode, print results regardless of -o
+  -l           loud mode, print results regardless of -o
 ```
 
 ## Schema
