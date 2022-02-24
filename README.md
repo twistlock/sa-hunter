@@ -5,12 +5,12 @@ For clusters hosted on managed Kubernetes services, `sa-hunter` identifies servi
 
 
 ## Quick Start
-`python3` and `pip3` are required.
+`python3` and `pip3` are required, can be installed [here](https://www.python.org/downloads]).
 1. Clone this repository.
 ```bash
 git clone https://github.com/twistlock/sa-hunter
 ```
-2. Install  the required python packages using `pip3`.
+2. Install  the required python packages.
 ```bash
 pip3 install -r sa-hunter/requirements.txt
 ```
@@ -62,11 +62,10 @@ optional arguments:
                     ]
                 }
             ],
-            "providerIAM": // omitempty
-                {
-                    "aws": "AWS role granted to this serviceaccount via the 'eks.amazonaws.com/role-arn' annotation, if exists",
-                    "gcp": "GCP service account binded to this serviceaccount via the 'iam.gke.io/gcp-service-account' annotation, if exists"
-                },    
+            "providerIAM": { // omitempty
+                "aws": "AWS role granted to this serviceaccount via the 'eks.amazonaws.com/role-arn' annotation, if exists",
+                "gcp": "GCP service account binded to this serviceaccount via the 'iam.gke.io/gcp-service-account' annotation, if exists"
+            },    
             "roles": [
                 {
                     "name": "role or clusterrole binded to the serviceaccount",
