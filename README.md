@@ -1,3 +1,4 @@
+# :bell: Deprecated in favour of [rbac-police](https://github.com/PaloAltoNetworks/rbac-police)
 # sa-hunter 
 Correlates serviceaccounts and pods to the permissions granted to them via rolebindings and clusterrolesbindings.
 
